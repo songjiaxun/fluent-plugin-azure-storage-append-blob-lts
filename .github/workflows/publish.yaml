@@ -1,10 +1,10 @@
-name: Ruby Gem
+name: Publish Ruby Gem
 
 on:
   workflow_dispatch:
     inputs:
       otp:
-        description: 'One Time Password'     
+        description: 'One Time Password'
         required: true
 
 jobs:

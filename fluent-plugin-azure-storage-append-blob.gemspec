@@ -3,13 +3,13 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
   spec.name = 'fluent-plugin-azure-storage-append-blob'
-  spec.version = '0.2.1'
-  spec.authors = ['Microsoft Corporation']
+  spec.version = '0.3.0'
+  spec.authors = ['Jonas-Taha El Sesiy']
   spec.email = ['']
 
   spec.summary = 'Azure Storage Append Blob output plugin for Fluentd event collector'
-  spec.description = 'Fluentd plugin to upload logs to Azure Storage append blobs.'
-  spec.homepage = 'https://github.com/Microsoft/fluent-plugin-azure-storage-append-blob'
+  spec.description = 'Fluentd plugin to upload logs to Azure Storage append blobs. Fork of https://github.com/elsesiy/fluent-plugin-azure-storage-append-blob'
+  spec.homepage = 'https://github.com/elsesiy/fluent-plugin-azure-storage-append-blob'
   spec.license = 'MIT'
 
   test_files, files = `git ls-files -z`.split("\x0").partition do |f|
