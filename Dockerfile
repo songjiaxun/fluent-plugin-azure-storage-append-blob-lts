@@ -6,8 +6,8 @@ ADD . /plugin
 
 RUN gem install bundler && \
     gem install fluentd --no-doc && \
-    fluent-gem build fluent-plugin-azure-storage-append-blob.gemspec && \
-    fluent-gem install fluent-plugin-azure-storage-append-blob-*.gem
+    fluent-gem build fluent-plugin-azure-storage-append-blob-lts.gemspec && \
+    fluent-gem install fluent-plugin-azure-storage-append-blob-lts-*.gem
 
 RUN echo "<source>\n\
   @type sample\n\

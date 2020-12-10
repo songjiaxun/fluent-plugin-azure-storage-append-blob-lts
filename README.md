@@ -1,20 +1,19 @@
-# fluent-plugin-azure-storage-append-blob
-
-[Fluentd](https://fluentd.org/) out plugin to do something.
+# fluent-plugin-azure-storage-append-blob-lts
 
 Azure Storage Append Blob output plugin buffers logs in local file and uploads them to Azure Storage Append Blob periodically.
+This plugin is a fork of [microsoft/fluent-plugin-azure-storage-append-blob](https://github.com/microsoft/fluent-plugin-azure-storage-append-blob) which is not actively maintained.
 
 ## Installation
 
 ### RubyGems
 
-    gem install fluent-plugin-azure-storage-append-blob
+    gem install fluent-plugin-azure-storage-append-blob-lts
 
 ### Bundler
 
 Add following line to your Gemfile:
 
-    gem "fluent-plugin-azure-storage-append-blob"
+    gem "fluent-plugin-azure-storage-append-blob-lts"
 
 And then execute:
 
@@ -137,8 +136,8 @@ Format of the time used in the file name. Default is '%Y%m%d'. Use '%Y%m%d%H' to
 3. SSH into VM
 4. Download this repo
    ```
-   git clone https://github.com/microsoft/fluent-plugin-azure-storage-append-blob.git
-   cd fluent-plugin-azure-storage-append-blob
+   git clone https://github.com/microsoft/fluent-plugin-azure-storage-append-blob-lts.git
+   cd fluent-plugin-azure-storage-append-blob-lts
    ```
 5. Build Docker image
    `docker build -t fluent .`
