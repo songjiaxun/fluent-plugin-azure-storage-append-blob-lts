@@ -18,6 +18,12 @@ class AzureStorageAppendBlobOutTest < Test::Unit::TestCase
     path log
   ).freeze
 
+  CONNSTR_CONFIG = %(
+    azure_storage_connection_string https://test
+    time_slice_format        %Y%m%d-%H
+    path log
+  ).freeze
+
   MSI_CONFIG = %(
     azure_storage_account test_storage_account
     azure_container test_container
@@ -66,6 +72,13 @@ class AzureStorageAppendBlobOutTest < Test::Unit::TestCase
       assert_equal 120, d.instance.azure_token_refresh_interval
       assert_equal '1970-01-01', d.instance.azure_imds_api_version
     end
+
+    test 'config with connection string should set instance variables' do
+      d = create_driver conf: CONNSTR_CONFIG
+      assert_equal 'https://test', d.instance.azure_storage_connection_string
+      assert_equal false, d.instance.use_msi
+      assert_equal true, d.instance.auto_create_container
+    end
   end
 
   sub_test_case 'test path slicing' do
@@ -92,15 +105,13 @@ class AzureStorageAppendBlobOutTest < Test::Unit::TestCase
   # This class is used to create an Azure::Core::Http::HTTPError. HTTPError parses
   # a response object when it is created.
   class FakeResponse
-    def initialize(status=404)
+    def initialize(status = 404)
       @status = status
-      @body = "body"
+      @body = 'body'
       @headers = {}
     end
 
-    attr_reader :status
-    attr_reader :body
-    attr_reader :headers
+    attr_reader :status, :body, :headers
   end
 
   # This class is used to test plugin functions which interact with the blob service
@@ -125,18 +136,18 @@ class AzureStorageAppendBlobOutTest < Test::Unit::TestCase
   sub_test_case 'test container_exists' do
     test 'container 404 returns false' do
       d = create_driver service: FakeBlobService.new(404)
-      assert_false d.instance.container_exists? "anything"
+      assert_false d.instance.container_exists? 'anything'
     end
 
     test 'existing container returns true' do
       d = create_driver service: FakeBlobService.new(200)
-      assert_true d.instance.container_exists? "anything"
+      assert_true d.instance.container_exists? 'anything'
     end
 
     test 'unexpected exception raises' do
       d = create_driver service: FakeBlobService.new(500)
       assert_raise_kind_of Azure::Core::Http::HTTPError do
-        d.instance.container_exists? "anything"
+        d.instance.container_exists? 'anything'
       end
     end
   end
@@ -175,10 +186,10 @@ class AzureStorageAppendBlobOutTest < Test::Unit::TestCase
 
     test 'long buffer appends multiple times' do
       limit = Fluent::Plugin::AzureStorageAppendBlobOut::AZURE_BLOCK_SIZE_LIMIT
-      buf_1 = 'a' * limit
-      buf_2 = 'a' * 3
-      blocks = fake_appended_blocks buf_1 + buf_2
-      assert_equal [buf_1, buf_2], blocks
+      buf1 = 'a' * limit
+      buf2 = 'a' * 3
+      blocks = fake_appended_blocks buf1 + buf2
+      assert_equal [buf1, buf2], blocks
     end
   end
 end
