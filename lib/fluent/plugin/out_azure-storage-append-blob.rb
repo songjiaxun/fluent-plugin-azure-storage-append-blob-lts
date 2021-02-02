@@ -92,7 +92,7 @@ module Fluent
 
         @blob_options = {}
 
-        if ! @calculate_checksums
+        if !@calculate_checksums
           @blob_options[:content_md5] = ''
         end
       end

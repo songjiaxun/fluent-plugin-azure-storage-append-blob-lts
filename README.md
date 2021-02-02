@@ -68,7 +68,7 @@ If all are empty, the plugin will use the local Managed Identity endpoint to obt
 
 ### `azure_imds_api_version` (Optional, only for MSI)
 
-Default: 2019-08-15
+Default: `2019-08-15`
 
 The Instance Metadata Service is used during the OAuth flow to obtain an access token. This API is versioned and specifying the version is mandatory.
 
@@ -76,7 +76,7 @@ See [here](https://docs.microsoft.com/en-us/azure/virtual-machines/linux/instanc
 
 ### `azure_token_refresh_interval` (Optional, only for MSI)
 
-Default: 60 (1 hour)
+Default: `60` (1 hour)
 
 When using MSI, the initial access token needs to be refreshed periodically.
 
@@ -138,11 +138,11 @@ Format of the time used in the file name. Default is '%Y%m%d'. Use '%Y%m%d%H' to
 
 ### `calculate_checksums`
 
-Whether to calculate MD5 checksum and provide it in a header for the blob service.
+Default: `true`
 
-You want to set it to `false` in FIPS enabled environments.
+Whether to calculate MD5 checksum of the blob contents during append operation and provide it in a header for the blob service.
 
-Default: true
+You want to set it to `false` in FIPS-enabled environments.
 
 ### Run tests
 
