@@ -1,5 +1,9 @@
 # fluent-plugin-azure-storage-append-blob-lts
 
+![Tests](https://github.com/elsesiy/fluent-plugin-azure-storage-append-blob-lts/workflows/Test/badge.svg?branch=master)
+[![Gem Version](https://badge.fury.io/rb/fluent-plugin-azure-storage-append-blob-lts.svg)](https://badge.fury.io/rb/fluent-plugin-azure-storage-append-blob-lts)
+[![Twitter](https://img.shields.io/badge/twitter-@elsesiy-blue.svg)](http://twitter.com/elsesiy)
+
 Azure Storage Append Blob output plugin buffers logs in local file and uploads them to Azure Storage Append Blob periodically.
 This plugin is a fork of [microsoft/fluent-plugin-azure-storage-append-blob](https://github.com/microsoft/fluent-plugin-azure-storage-append-blob) which is not actively maintained.
 
