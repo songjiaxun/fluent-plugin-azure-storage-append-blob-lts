@@ -34,6 +34,16 @@ class AzureStorageAppendBlobOutTest < Test::Unit::TestCase
     path log
   ).freeze
 
+  AZURESTACKCLOUD_CONFIG = %(
+    azure_cloud AZURESTACKCLOUD
+    azure_storage_dns_suffix test.storage.dns.suffix
+    azure_storage_account test_storage_account
+    azure_storage_access_key MY_FAKE_SECRET
+    azure_container test_container
+    time_slice_format        %Y%m%d-%H
+    path log
+  ).freeze
+
   def create_driver(conf: CONFIG, service: nil)
     d = Fluent::Test::Driver::Output.new(Fluent::Plugin::AzureStorageAppendBlobOut).configure(conf)
     d.instance.instance_variable_set(:@bs, service)
@@ -43,13 +53,29 @@ class AzureStorageAppendBlobOutTest < Test::Unit::TestCase
 
   sub_test_case 'test config' do
     test 'config should reject with no azure container' do
-      assert_raise Fluent::ConfigError do
+      assert_raise Fluent::ConfigError.new('azure_container needs to be specified') do
         create_driver conf: %(
           azure_storage_account test_storage_account
           azure_storage_access_key MY_FAKE_SECRET
           time_slice_format        %Y%m%d-%H
           time_slice_wait          10m
           path log
+        )
+      end
+    end
+
+    test 'config should reject for invalid cloud ' do
+      assert_raise Fluent::ConfigError.new('azure_cloud invalid, must be either of AZURECHINACLOUD, AZUREGERMANCLOUD, AZUREPUBLICCLOUD, AZUREUSGOVERNMENTCLOUD, AZURESTACKCLOUD') do
+        create_driver conf: %(
+          azure_cloud INVALIDCLOUD
+        )
+      end
+    end
+
+    test 'config should reject for Azure Stack Cloud with no azure storage dns suffix' do
+      assert_raise Fluent::ConfigError.new('azure_storage_dns_suffix invalid, must not be empty for AZURESTACKCLOUD') do
+        create_driver conf: %(
+          azure_cloud AZURESTACKCLOUD
         )
       end
     end
@@ -80,6 +106,16 @@ class AzureStorageAppendBlobOutTest < Test::Unit::TestCase
       assert_equal 'https://test', d.instance.azure_storage_connection_string
       assert_equal false, d.instance.instance_variable_get(:@use_msi)
       assert_equal true, d.instance.auto_create_container
+    end
+  
+    test 'config for Azure Stack Cloud should set instance variables' do
+      d = create_driver conf: AZURESTACKCLOUD_CONFIG
+      assert_equal 'test.storage.dns.suffix', d.instance.instance_variable_get(:@azure_storage_dns_suffix)
+      assert_equal 'test_storage_account', d.instance.azure_storage_account
+      assert_equal 'MY_FAKE_SECRET', d.instance.azure_storage_access_key
+      assert_equal 'test_container', d.instance.azure_container
+      assert_equal true, d.instance.auto_create_container
+      assert_equal '%{path}%{time_slice}-%{index}.log', d.instance.azure_object_key_format
     end
   end
 

@@ -29,6 +29,7 @@ And then execute:
       type azure-storage-append-blob
 
       azure_cloud                       <azure cloud environment>
+      azure_storage_dns_suffix          <your azure storage dns suffix> # only used for Azure Stack Cloud
       azure_storage_account             <your azure storage account>
       azure_storage_access_key          <your azure storage access key> # leave empty to use MSI
       azure_storage_connection_string   <your azure storage connection string> # leave empty to use MSI
@@ -58,6 +59,12 @@ And then execute:
 Default: `AZUREPUBLICCLOUD`
 
 Cloud environment used to determine the storage endpoint suffix to use, see [here](https://github.com/Azure/go-autorest/blob/master/autorest/azure/environments.go).
+
+Use `AZURESTACKCLOUD` for Azure Stack Cloud.
+
+### `azure_storage_dns_suffix` (Required only for Azure Stack Cloud)
+
+Your Azure Storage endpoint suffix. This can be retrieved from Azure Storage connection string, `EndpointSuffix` section.
 
 ### `azure_storage_account` (Required)
 

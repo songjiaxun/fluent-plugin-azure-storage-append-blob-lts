@@ -36,6 +36,7 @@ module Fluent
       config_param :azure_storage_account, :string, default: nil
       config_param :azure_storage_access_key, :string, default: nil, secret: true
       config_param :azure_storage_connection_string, :string, default: nil, secret: true
+      config_param :azure_storage_dns_suffix, :string, default: nil
       config_param :azure_storage_sas_token, :string, default: nil, secret: true
       config_param :azure_cloud, :string, default: 'AZUREPUBLICCLOUD'
       config_param :azure_msi_client_id, :string, default: nil
@@ -75,9 +76,15 @@ module Fluent
                          end
                        end
 
-        @azure_storage_dns_suffix = @storage_endpoint_mapping[@azure_cloud]
-        if @azure_storage_dns_suffix.nil?
-          raise ConfigError 'azure_cloud invalid, must be either of AZURECHINACLOUD, AZUREGERMANCLOUD, AZUREPUBLICCLOUD, AZUREUSGOVERNMENTCLOUD'
+        if @azure_cloud == 'AZURESTACKCLOUD'
+          if @azure_storage_dns_suffix.nil?
+            raise ConfigError, 'azure_storage_dns_suffix invalid, must not be empty for AZURESTACKCLOUD'
+          end
+        else
+          @azure_storage_dns_suffix = @storage_endpoint_mapping[@azure_cloud]
+          if @azure_storage_dns_suffix.nil?
+            raise ConfigError, 'azure_cloud invalid, must be either of AZURECHINACLOUD, AZUREGERMANCLOUD, AZUREPUBLICCLOUD, AZUREUSGOVERNMENTCLOUD, AZURESTACKCLOUD'
+          end
         end
 
         if (@azure_storage_access_key.nil? || @azure_storage_access_key.empty?) &&
